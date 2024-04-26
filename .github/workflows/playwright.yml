@@ -8,9 +8,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pull-requests: read
+  contents: write
+  pull-requests: write
   actions: write
+  id-token: write
 
 jobs:
   test:
@@ -46,7 +47,7 @@ jobs:
       - name: Push the new files to github pages
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./playwright-report # from what folder to take files. It takes only contents
           destination_dir: tst-resuts # a sub-directory where to publish to avoid overwriting other reports     
       - name: Write URL in summary
