@@ -1,0 +1,67 @@
+name: Playwright SOX Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: write
+
+jobs:
+  test:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          check-latest: false
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install Playwright Browsers
+        run: yarn pw:install-browsers:ci
+
+      - name: Run Playwright tests
+        run: yarn pw:test:ci:github
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results
+          if-no-files-found: error
+          retention-days: 15
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "./test-results" 
+  deploy-coverage:
+     needs: test
+    
+     permissions:
+       pages: write
+       id-token: write
+
+     environment:
+       name: github-pages
+       url: ${{ steps.deployment.outputs.page_url }}
+      
+     runs-on: ubuntu-latest
+     steps:
+       - name: Deploy to GitHub Pages
+         id: deployment
+         uses: actions/deploy-pages@v4

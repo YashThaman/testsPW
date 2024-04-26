@@ -1,2 +1,2 @@
-# testsPW
-PW testes
+# playwrightTests
+learn Playwright concepts and create tests
