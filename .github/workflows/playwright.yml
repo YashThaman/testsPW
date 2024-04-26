@@ -67,7 +67,7 @@ jobs:
          uses: actions/deploy-pages@v4
        - name: Deploy to GitHub Pages
          run: |
-           git config --global user.name ${{github.actor}}
+           git config --global user.name "${{github.actor}}"
            git config --global user.email 'yash.thaman@gmail.com'
            git checkout --orphan gh-pages
            git --work-tree dist add --all
