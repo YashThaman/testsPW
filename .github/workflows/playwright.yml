@@ -49,6 +49,15 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./test-results" 
+      - name: Deploy to GitHub Pages
+        run: |
+           git config --global user.name "${{github.actor}}"
+           git config --global user.email 'yash.thaman@gmail.com'
+           git checkout --orphan gh-pages
+           git --work-tree dist add --all
+           git --work-tree dist commit -m "Deploying to GitHub Pages"
+           git push origin HEAD:gh-pages --force
+ 
   deploy-coverage:
      needs: test
     
@@ -65,12 +74,4 @@ jobs:
        - name: Deploy to GitHub Pages
          id: deployment
          uses: actions/deploy-pages@v4
-       - name: Deploy to GitHub Pages
-         run: |
-           git config --global user.name "${{github.actor}}"
-           git config --global user.email 'yash.thaman@gmail.com'
-           git checkout --orphan gh-pages
-           git --work-tree dist add --all
-           git --work-tree dist commit -m "Deploying to GitHub Pages"
-           git push origin HEAD:gh-pages --force
- 
+
