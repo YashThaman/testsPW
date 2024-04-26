@@ -51,7 +51,6 @@ jobs:
           destination_dir: tst-resuts # a sub-directory where to publish to avoid overwriting other reports     
       - name: Write URL in summary
         run: echo "### Test results (link available after 20 secs) -  https://yashthaman.github.io/testsPW/tst-resuts/" >> $GITHUB_STEP_SUMMARY
-# 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
       # - name: Setup Pages
       #   uses: actions/configure-pages@v5
       # - name: Upload Artifact
