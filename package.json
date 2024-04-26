@@ -1,0 +1,33 @@
+{
+  "name": "playwrightTests",
+  "version": "1.0.0",
+  "description": "Playwright tests demo",
+  "license": "UNLICENSED",
+  "scripts": {
+    "pw:codegen": "playwright codegen https://qa.premiumbeat.com",
+    "pw:install-browsers": "playwright install chromium",
+    "pw:install-browsers:ci": "yarn pw:install-browsers --with-deps",
+    "pw:open": "yarn pw:test --ui",
+    "pw:debug": "yarn pw:test --debug",
+    "pw:show-report": "playwright show-report test-results/test-report",
+    "pw:test": "playwright test",
+    "pw:test:ci:github": "CI=${CI:-true} xvfb-run yarn pw:test"
+  },
+  "engines": {
+    "node": "^20",
+    "yarn": "^1.22.19"
+  },
+  "keywords": [
+    "pbv4",
+    "sox",
+    "playwright"
+  ],
+  "author": "",
+  "dependencies": {
+    "dotenv": "16.0.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.37.1",
+    "@types/node": "^20.12.7"
+  }
+}

@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+      "target": "es2017",
+      "module": "commonjs",
+      "strict": true,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "noEmit": true,
+      "skipLibCheck": true,
+      "paths": {
+        "@test/pw-sox/*": ["../tests/*"]
+      }
+    },
+    "include": ["**/*.ts", "**/*.json"],
+    "exclude": ["node_modules"]
+   }
+   
+   
+   
+   
