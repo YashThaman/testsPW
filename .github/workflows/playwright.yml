@@ -50,7 +50,6 @@ jobs:
         with:
           path: "./test-results" 
   deploy-coverage:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: test
     
