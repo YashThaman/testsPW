@@ -21,7 +21,7 @@ import {
     : [
         [
           'html',
-          { outputFolder: 'test-results/', open: 'on-failure' },
+          { outputFolder: 'test-report/', open: 'on-failure' },
         ],
         ['list'],
       ];
@@ -65,10 +65,10 @@ import {
     navigationTimeout: getMilliseconds(60, 'seconds'),
     ignoreHTTPSErrors: true,
     /* Artifacts are only kept during failures (and are retained even after a successful retry) */
-    trace: 'retain-on-failure',
+    trace: 'on',
     video: 'retain-on-failure',
     screenshot: {
-      mode: 'only-on-failure',
+      mode: 'on',
       fullPage: true,
     },
   },

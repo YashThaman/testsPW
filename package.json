@@ -9,7 +9,7 @@
     "pw:install-browsers:ci": "yarn pw:install-browsers --with-deps",
     "pw:open": "yarn pw:test --ui",
     "pw:debug": "yarn pw:test --debug",
-    "pw:show-report": "playwright show-report test-results/test-report",
+    "pw:show-report": "playwright show-report test-report",
     "pw:test": "playwright test",
     "pw:test:ci:github": "CI=${CI:-true} xvfb-run yarn pw:test"
   },
