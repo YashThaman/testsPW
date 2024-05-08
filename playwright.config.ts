@@ -12,16 +12,17 @@ import {
  const reporter: ReporterDescription[] =
   process.env.CI === 'true'
     ? [
-        ['github'],
-        ['json', { outputFile: 'test-results/test-results.json' }],
-        ['junit', { outputFile: 'test-results/junit-test-results.xml' }],
-        ['html', { outputFolder: 'test-results/', open: 'never' }],
-        ['list'],
+      ['blob']
+        // ['github'],
+        // ['json', { outputFile: 'test-results/test-results.json' }],
+        // ['junit', { outputFile: 'test-results/junit-test-results.xml' }],
+        // ['html', { outputFolder: 'test-results/', open: 'never' }],
+        // ['list'],
       ]
     : [
         [
           'html',
-          { outputFolder: 'test-report/', open: 'on-failure' },
+          { outputFolder: 'test-results/test-report/', open: 'on-failure' },
         ],
         ['list'],
       ];
@@ -55,7 +56,7 @@ import {
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter,
   /* Folder for test artifacts such as screenshots, videos, traces, etc. */
-  outputDir: 'test-artifacts',
+  outputDir: 'test-results/test-artifacts',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */

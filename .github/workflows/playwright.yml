@@ -11,12 +11,17 @@ permissions:
   contents: write
   pull-requests: write
   actions: write
-  id-token: write
 
 jobs:
   test:
     timeout-minutes: 20
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4]
+        shardTotal: [4]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -34,30 +39,71 @@ jobs:
         run: yarn pw:install-browsers:ci
 
       - name: Run Playwright tests
-        run: yarn pw:test:ci:github
+        run: yarn pw:test:ci:github --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results
-          path: test-results
+          name: test-results-${{ matrix.shardIndex}}
+          path: test-report
           if-no-files-found: error
           retention-days: 15
-      - name: Push the new files to github pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload blob report to GitHub Actions Artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./test-results # from what folder to take files. It takes only contents
-          destination_dir: tst-resuts # a sub-directory where to publish to avoid overwriting other reports     
-      - name: Write URL in summary
-        run: echo "### Test results (link available after 20 secs) -  https://yashthaman.github.io/testsPW/tst-resuts/" >> $GITHUB_STEP_SUMMARY
+          name: blob-report-${{ matrix.shardIndex }}
+          path: blob-report
+          retention-days: 1
+
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    if: ${{ !cancelled() }}
+    needs: [test]
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*
+        merge-multiple: true
+
+    - name: Merge into HTML Report
+      run: npx playwright merge-reports --reporter html ./all-blob-reports
+
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v4
+      with:
+        name: html-report--attempt-${{ github.run_attempt }}
+        path: playwright-report
+        retention-days: 14      
+      # - name: Push the new files to github pages
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./test-results # from what folder to take files. It takes only contents
+      #     destination_dir: tst-resuts # a sub-directory where to publish to avoid overwriting other reports     
+      # - name: Write URL in summary
+      # #   run: echo "### Test results (link available after 20 secs) -  https://yashthaman.github.io/testsPW/tst-resuts/" >> $GITHUB_STEP_SUMMARY
       # - name: Setup Pages
       #   uses: actions/configure-pages@v5
       # - name: Upload Artifact
       #   uses: actions/upload-pages-artifact@v3
       #   with:
-      #     path: "./test-results" 
+      #     path: "./test-report" 
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4
       # - name: Deploy to GitHub Pages
       #   run: |
       #      git config --global user.name "${{github.actor}}"
@@ -70,15 +116,6 @@ jobs:
  
   # deploy-coverage:
   #    needs: test
-    
-  #    permissions:
-  #      pages: write
-  #      id-token: write
-
-  #    environment:
-  #      name: github-pages
-  #      url: ${{ steps.deployment.outputs.page_url }}
-      
   #    runs-on: ubuntu-latest
   #    steps:
   #      - name: Deploy to GitHub Pages
