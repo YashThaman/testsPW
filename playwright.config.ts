@@ -12,11 +12,12 @@ import {
  const reporter: ReporterDescription[] =
   process.env.CI === 'true'
     ? [
-        ['github'],
-        ['json', { outputFile: 'test-results/test-results.json' }],
-        ['junit', { outputFile: 'test-results/junit-test-results.xml' }],
-        ['html', { outputFolder: 'test-results/', open: 'never' }],
-        ['list'],
+      ['blob']
+        // ['github'],
+        // ['json', { outputFile: 'test-results/test-results.json' }],
+        // ['junit', { outputFile: 'test-results/junit-test-results.xml' }],
+        // ['html', { outputFolder: 'test-results/', open: 'never' }],
+        // ['list'],
       ]
     : [
         [
