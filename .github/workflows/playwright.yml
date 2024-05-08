@@ -54,6 +54,8 @@ jobs:
           path: test-report
           if-no-files-found: error
           retention-days: 15
+
+      
       # - name: Push the new files to github pages
       #   uses: peaceiris/actions-gh-pages@v3
       #   with:
@@ -61,16 +63,16 @@ jobs:
       #     publish_dir: ./test-results # from what folder to take files. It takes only contents
       #     destination_dir: tst-resuts # a sub-directory where to publish to avoid overwriting other reports     
       # - name: Write URL in summary
-      #   run: echo "### Test results (link available after 20 secs) -  https://yashthaman.github.io/testsPW/tst-resuts/" >> $GITHUB_STEP_SUMMARY
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./test-report" 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      # #   run: echo "### Test results (link available after 20 secs) -  https://yashthaman.github.io/testsPW/tst-resuts/" >> $GITHUB_STEP_SUMMARY
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+      # - name: Upload Artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: "./test-report" 
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4
       # - name: Deploy to GitHub Pages
       #   run: |
       #      git config --global user.name "${{github.actor}}"
